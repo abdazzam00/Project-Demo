@@ -1,0 +1,49 @@
+from openai import OpenAI
+
+client = OpenAI(api_key='sk-')
+
+def generate_response(messages, model="gpt-4o"):
+    response = client.chat.completions.create(
+        model=model,
+        messages=messages
+    )
+    return response.choices[0].message.content
+
+def start_conversation():
+    
+    messages = [
+        {"role": "system", "content": "You are an expert in understanding user's profession. I will also give you my linkedin profile link and you will understand my indstury and what can I do it accerlate my profession growth"}
+    ]
+    
+    print("Hi, I am your AI Agent. I will go over your linkedIn profile to understand your profession.")
+    
+    while True:
+        
+        user_input = input("User: ")
+        if user_input.lower() in ["exit", "quit"]:
+            print("Assistant: Goodbye!")
+            break
+        
+        messages.append({"role": "user", "content": user_input})
+        
+        
+        summarize_prompt = f"Understand what user is in professional career: {user_input} Please give best top 3 keywords to for LinkedIn search"
+        messages.append({"role": "user", "content": summarize_prompt})
+        summary = generate_response(messages)
+        
+        
+        print(f"Agent: So you are seeking to {summary}")
+        
+        
+        #search_prompt = f"Generate only 3 most relevant LinkedIn search keywords based on this user profession: {summary}. I want to use these keywords to find the relevent person and provide the keywords in a single line separated by commas."
+        #messages.append({"role": "user", "content": search_prompt})
+        #search_keywords = generate_response(messages)
+        
+        #print(f" Agent: {search_keywords}")
+
+start_conversation()
+
+
+
+
+
